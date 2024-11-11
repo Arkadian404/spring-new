@@ -1,1 +1,22 @@
-spring.application.name=spring_new
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/test}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+server:
+  port: 8080
+  servlet:
+    context-path: /core
+
+jwt:
+  secret-key: "t3CrCMIEe9wEmoi8epnfbT92Ba5A9mq2Txi2/u/mQTVR+zZErbhz5x8mYLMWTR18"
+  valid-duration: 3600 #seconds
+  refreshable-duration: 360000 #seconds
