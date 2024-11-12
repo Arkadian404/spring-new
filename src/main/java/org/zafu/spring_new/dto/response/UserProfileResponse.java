@@ -1,22 +1,19 @@
 package org.zafu.spring_new.dto.response;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
-    Long id;
-    String username;
+public class UserProfileResponse {
+    String id;
     String firstname;
     String lastname;
     LocalDate dob;
     String city;
-    Set<RoleResponse> roles;
 }

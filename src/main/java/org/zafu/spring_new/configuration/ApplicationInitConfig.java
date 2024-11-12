@@ -36,14 +36,10 @@ public class ApplicationInitConfig {
     ApplicationRunner applicationRunner() {
         return args -> {
             if (userRepo.findByUsername("admin").isEmpty()) {
-                roleRepo.save(Role.builder()
-                                .name("USER")
-                                .description("User role")
-                                .build());
-                Role adminRole = roleRepo.save(Role.builder()
-                                .name("ADMIN")
-                                .description("Admin role")
-                                .build());
+                roleRepo.save(
+                        Role.builder().name("USER").description("User role").build());
+                Role adminRole = roleRepo.save(
+                        Role.builder().name("ADMIN").description("Admin role").build());
                 Set<Role> roles = new HashSet<>();
                 roles.add(adminRole);
                 User user = User.builder()

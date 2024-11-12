@@ -20,3 +20,7 @@ jwt:
   secret-key: "t3CrCMIEe9wEmoi8epnfbT92Ba5A9mq2Txi2/u/mQTVR+zZErbhz5x8mYLMWTR18"
   valid-duration: 3600 #seconds
   refreshable-duration: 360000 #seconds
+
+app:
+  services:
+    profile: http://localhost:8081/profile

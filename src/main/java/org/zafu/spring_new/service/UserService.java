@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.zafu.spring_new.dto.request.UserProfileRequest;
 import org.zafu.spring_new.dto.request.UserRequest;
 import org.zafu.spring_new.dto.request.UserUpdate;
 import org.zafu.spring_new.dto.response.UserResponse;
@@ -19,8 +20,10 @@ import org.zafu.spring_new.entity.User;
 import org.zafu.spring_new.exception.AppException;
 import org.zafu.spring_new.exception.ErrorCode;
 import org.zafu.spring_new.mapper.UserMapper;
+import org.zafu.spring_new.mapper.UserProfileMapper;
 import org.zafu.spring_new.repo.RoleRepo;
 import org.zafu.spring_new.repo.UserRepo;
+import org.zafu.spring_new.repo.httpclient.ProfileClient;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,8 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
     UserRepo userRepo;
     UserMapper userMapper;
+    UserProfileMapper userProfileMapper;
+    ProfileClient profileClient;
     PasswordEncoder passwordEncoder;
     RoleRepo roleRepo;
 
@@ -49,6 +54,10 @@ public class UserService {
         } catch (DataIntegrityViolationException exception) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
+        UserProfileRequest userProfileRequest = userProfileMapper.toUserProfileRequest(userDto);
+        userProfileRequest.setUserId(user.getId());
+        var userProfileResponse = profileClient.createProfile(userProfileRequest);
+        log.info(userProfileResponse.toString());
         return userMapper.toUserResponse(user);
     }
 

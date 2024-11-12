@@ -20,14 +20,14 @@ public class GlobalExceptionHandler {
 
     private static final String MIN_ATTRIBUTE = "min";
 
-    @ExceptionHandler(Exception.class)
-    ResponseEntity<ApiResponse<?>> handlerRuntimeException(Exception exception) {
-        return ResponseEntity.status(ErrorCode.UNCATEGORIZED_EXCEPTION.getHttpStatus())
-                .body(ApiResponse.builder()
-                        .code(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode())
-                        .message(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage())
-                        .build());
-    }
+        @ExceptionHandler(Exception.class)
+        ResponseEntity<ApiResponse<?>> handlerRuntimeException(Exception exception) {
+            return ResponseEntity.status(ErrorCode.UNCATEGORIZED_EXCEPTION.getHttpStatus())
+                    .body(ApiResponse.builder()
+                            .code(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode())
+                            .message(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage())
+                            .build());
+        }
 
     @ExceptionHandler(AppException.class)
     ResponseEntity<ApiResponse<?>> handlerAppException(AppException ae) {
@@ -58,7 +58,8 @@ public class GlobalExceptionHandler {
             //            var constraintViolation =
             // e.getBindingResult().getAllErrors().getFirst().unwrap(ConstraintViolation.class);
             // jdk 17
-            var constraintViolation = e.getBindingResult().getAllErrors().get(0).unwrap(ConstraintViolation.class);
+            var constraintViolation =
+                    e.getBindingResult().getAllErrors().getFirst().unwrap(ConstraintViolation.class);
             attributes = constraintViolation.getConstraintDescriptor().getAttributes();
             log.info(attributes.toString());
         } catch (IllegalArgumentException ex) {
