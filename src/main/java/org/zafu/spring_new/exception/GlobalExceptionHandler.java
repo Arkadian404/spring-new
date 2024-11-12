@@ -20,14 +20,14 @@ public class GlobalExceptionHandler {
 
     private static final String MIN_ATTRIBUTE = "min";
 
-        @ExceptionHandler(Exception.class)
-        ResponseEntity<ApiResponse<?>> handlerRuntimeException(Exception exception) {
-            return ResponseEntity.status(ErrorCode.UNCATEGORIZED_EXCEPTION.getHttpStatus())
-                    .body(ApiResponse.builder()
-                            .code(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode())
-                            .message(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage())
-                            .build());
-        }
+    @ExceptionHandler(Exception.class)
+    ResponseEntity<ApiResponse<?>> handlerRuntimeException(Exception exception) {
+        return ResponseEntity.status(ErrorCode.UNCATEGORIZED_EXCEPTION.getHttpStatus())
+                .body(ApiResponse.builder()
+                        .code(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode())
+                        .message(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage())
+                        .build());
+    }
 
     @ExceptionHandler(AppException.class)
     ResponseEntity<ApiResponse<?>> handlerAppException(AppException ae) {

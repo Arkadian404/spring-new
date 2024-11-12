@@ -9,6 +9,6 @@ import org.zafu.spring_new.dto.response.UserProfileResponse;
 
 @FeignClient(name = "profile-service", url = "${app.services.profile}")
 public interface ProfileClient {
-    @PostMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/internal/users", produces = MediaType.APPLICATION_JSON_VALUE)
     UserProfileResponse createProfile(@RequestBody UserProfileRequest request);
 }
