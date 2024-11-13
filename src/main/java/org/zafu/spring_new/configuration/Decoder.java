@@ -1,21 +1,16 @@
 package org.zafu.spring_new.configuration;
 
 import java.text.ParseException;
-import java.util.Objects;
-import javax.crypto.spec.SecretKeySpec;
+import java.time.Instant;
+import java.util.Map;
 
+import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
-import org.zafu.spring_new.dto.request.IntrospectRequest;
-import org.zafu.spring_new.dto.response.IntrospectResponse;
-import org.zafu.spring_new.service.AuthenticationService;
 
-import com.nimbusds.jose.JOSEException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,27 +18,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Decoder implements JwtDecoder {
 
-    @Value("${jwt.secret-key}")
-    private String SECRET_KEY;
-
-    private NimbusJwtDecoder jwtDecoder = null;
-    private final AuthenticationService service;
-
     @Override
     public Jwt decode(String token) throws JwtException {
-        IntrospectRequest request = IntrospectRequest.builder().token(token).build();
         try {
-            IntrospectResponse response = service.introspect(request);
-            if (!response.isValid()) throw new JwtException("Token invalid");
-        } catch (JOSEException | ParseException ex) {
-            ex.printStackTrace();
+            SignedJWT jwt = SignedJWT.parse(token);
+            Instant issueTime = jwt.getJWTClaimsSet().getIssueTime().toInstant();
+            Instant expiredTime = jwt.getJWTClaimsSet().getExpirationTime().toInstant();
+            Map<String, Object> headers = jwt.getHeader().toJSONObject();
+            Map<String, Object> claims = jwt.getJWTClaimsSet().getClaims();
+            return new Jwt(token, issueTime, expiredTime, headers, claims);
+        } catch (ParseException e) {
+            throw new JwtException("Invalid token");
         }
-        if (Objects.isNull(jwtDecoder)) {
-            SecretKeySpec keySpec = new SecretKeySpec(SECRET_KEY.getBytes(), "HS512");
-            jwtDecoder = NimbusJwtDecoder.withSecretKey(keySpec)
-                    .macAlgorithm(MacAlgorithm.HS512)
-                    .build();
-        }
-        return jwtDecoder.decode(token);
+
     }
 }

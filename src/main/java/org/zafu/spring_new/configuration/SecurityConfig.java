@@ -21,7 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private static final String[] PUBLIC_ENDPOINTS = {
-        "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh"
+        "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh", "/users/register"
     };
 
     private final Decoder jwtDecoder;

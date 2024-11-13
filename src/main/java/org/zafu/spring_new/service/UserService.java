@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,7 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAll() {
         log.info("Access successfully");
         return userRepo.findAll().stream().map(userMapper::toUserResponse).toList();
