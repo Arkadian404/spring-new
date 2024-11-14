@@ -4,13 +4,12 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.util.Map;
 
-import com.nimbusds.jwt.SignedJWT;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Component;
 
+import com.nimbusds.jwt.SignedJWT;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +29,5 @@ public class Decoder implements JwtDecoder {
         } catch (ParseException e) {
             throw new JwtException("Invalid token");
         }
-
     }
 }

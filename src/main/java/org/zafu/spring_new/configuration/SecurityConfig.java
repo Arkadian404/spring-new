@@ -11,9 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -40,19 +37,7 @@ public class SecurityConfig {
         http.oauth2ResourceServer(
                 config -> config.jwt(jwtConfig -> jwtConfig.decoder(jwtDecoder).jwtAuthenticationConverter(converter()))
                         .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
-        http.cors(cors -> cors.configurationSource(source()));
         return http.build();
-    }
-
-    @Bean
-    public CorsConfigurationSource source() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 
     @Bean

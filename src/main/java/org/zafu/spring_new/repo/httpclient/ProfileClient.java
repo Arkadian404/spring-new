@@ -8,7 +8,8 @@ import org.zafu.spring_new.configuration.AuthenticationRequestInterceptor;
 import org.zafu.spring_new.dto.request.UserProfileRequest;
 import org.zafu.spring_new.dto.response.UserProfileResponse;
 
-@FeignClient(name = "profile-service",
+@FeignClient(
+        name = "profile-service",
         url = "${app.services.profile}",
         configuration = {AuthenticationRequestInterceptor.class})
 public interface ProfileClient {
