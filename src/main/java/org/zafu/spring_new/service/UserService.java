@@ -7,6 +7,7 @@ import java.util.Set;
 import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +43,8 @@ public class UserService {
     ProfileClient profileClient;
     PasswordEncoder passwordEncoder;
     RoleRepo roleRepo;
+    KafkaTemplate<String, String> template;
+
 
     public UserResponse createUser(UserRequest userDto) {
         User user = userMapper.toUser(userDto);
@@ -59,6 +62,9 @@ public class UserService {
         userProfileRequest.setUserId(user.getId());
         var userProfileResponse = profileClient.createProfile(userProfileRequest);
         log.info(userProfileResponse.toString());
+
+        template.send("onboard-successful","Welcome newbie "+userDto.getUsername());
+
         return userMapper.toUserResponse(user);
     }
 
