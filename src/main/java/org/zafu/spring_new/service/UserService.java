@@ -2,8 +2,10 @@ package org.zafu.spring_new.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
+import event.dto.NotificationEvent;
 import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -43,7 +45,7 @@ public class UserService {
     ProfileClient profileClient;
     PasswordEncoder passwordEncoder;
     RoleRepo roleRepo;
-    KafkaTemplate<String, String> template;
+    KafkaTemplate<String, Object> template;
 
 
     public UserResponse createUser(UserRequest userDto) {
@@ -63,7 +65,14 @@ public class UserService {
         var userProfileResponse = profileClient.createProfile(userProfileRequest);
         log.info(userProfileResponse.toString());
 
-        template.send("onboard-successful","Welcome newbie "+userDto.getUsername());
+        NotificationEvent event = NotificationEvent.builder()
+                .channel("EMAIL")
+                .recipient(userDto.getEmail())
+                .subject("Welcome to book2book")
+                .body("Hello, "+userDto.getUsername())
+                .build();
+
+        template.send("notification-delivery", event);
 
         return userMapper.toUserResponse(user);
     }

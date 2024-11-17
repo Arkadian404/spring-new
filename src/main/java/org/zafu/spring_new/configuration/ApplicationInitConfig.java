@@ -25,15 +25,14 @@ import lombok.extern.slf4j.Slf4j;
 public class ApplicationInitConfig {
 
     PasswordEncoder passwordEncoder;
-    UserRepo userRepo;
-    RoleRepo roleRepo;
+
 
     @Bean
     @ConditionalOnProperty(
             prefix = "spring",
             value = "datasource.driverClassName",
             havingValue = "com.mysql.cj.jdbc.Driver")
-    ApplicationRunner applicationRunner() {
+    ApplicationRunner applicationRunner(UserRepo userRepo, RoleRepo roleRepo) {
         return args -> {
             if (userRepo.findByUsername("admin").isEmpty()) {
                 roleRepo.save(
@@ -44,7 +43,7 @@ public class ApplicationInitConfig {
                 roles.add(adminRole);
                 User user = User.builder()
                         .username("admin")
-                        .password(passwordEncoder.encode("password"))
+                        .password(passwordEncoder.encode("admin"))
                         .roles(roles)
                         .build();
                 userRepo.save(user);
