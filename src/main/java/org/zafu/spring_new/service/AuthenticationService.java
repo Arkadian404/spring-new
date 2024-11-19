@@ -72,7 +72,7 @@ public class AuthenticationService {
     private String generateToken(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject(user.getUsername())
+                .subject(user.getId().toString())
                 .issuer("zafu.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
