@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserProfileRequest {
     Long userId;
+    String username;
     String firstname;
     String lastname;
     LocalDate dob;
